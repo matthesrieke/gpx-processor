@@ -1,0 +1,16 @@
+{
+  "name": "gpx-analyzer",
+  "version": "1.0.0",
+  "description": "analzye and optimize GPX tracks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gdal": "^0.9.4",
+    "minimist": "^1.2.0",
+    "xml2js": "^0.4.17"
+  }
+}
