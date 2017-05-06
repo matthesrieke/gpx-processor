@@ -11,7 +11,7 @@ if (!trackFile) {
 }
 
 var parser = new xml2js.Parser();
-fs.readFile(__dirname + '/' +trackFile, function(err, data) {
+fs.readFile(trackFile, function(err, data) {
     parser.parseString(data, function (err, gpxData) {
         var segments = toSegments(gpxData);
 
@@ -31,13 +31,11 @@ fs.readFile(__dirname + '/' +trackFile, function(err, data) {
                 return console.log(err);
             }
 
-            console.log('The file was saved!');
-            process.exit(0);
           });
           count++;
         });
 
-
+        console.log('Writing '+count+ ' output files...');
     });
 });
 
