@@ -10,6 +10,8 @@ if (!trackFile) {
   process.exit(1);
 }
 
+var outputFile = argv.o || argv.output || 'output.gpx';
+
 var parser = new xml2js.Parser();
 fs.readFile(trackFile, function(err, data) {
     parser.parseString(data, function (err, gpxData) {
@@ -17,25 +19,25 @@ fs.readFile(trackFile, function(err, data) {
 
         var builder = new xml2js.Builder();
 
+        var cloneOfTrack = JSON.parse(JSON.stringify(gpxData));
+        delete cloneOfTrack.gpx.trk[0].trkseg;
+        cloneOfTrack.gpx.trk[0].trkseg = [];
+
         var count = 0;
         segments.forEach(function(segment) {
-          var cloneOfTrack = JSON.parse(JSON.stringify(gpxData));
-
-          delete cloneOfTrack.gpx.trk[0].trkseg;
-
-          cloneOfTrack.gpx.trk[0].trkseg = [];
           cloneOfTrack.gpx.trk[0].trkseg.push(segment);
-          var xml = builder.buildObject(cloneOfTrack);
-          fs.writeFile(__dirname + '/output-'+count+'.gpx', xml, function(err) {
-            if(err) {
-                return console.log(err);
-            }
-
-          });
           count++;
         });
 
-        console.log('Writing '+count+ ' output files...');
+        console.log('Added '+count+ ' segments to output file...');
+        var xml = builder.buildObject(cloneOfTrack);
+        fs.writeFile(outputFile.startsWith('/') ? outputFile : __dirname + '/'+outputFile, xml, function(err) {
+          if(err) {
+              return console.log(err);
+          }
+          console.info('file written: '+outputFile);
+
+        });
     });
 });
 
